@@ -1,0 +1,29 @@
+@echo off
+echo ========================================
+echo Running Git Sync for samuelongitcode
+echo ========================================
+
+echo Setting local identity for samuelongitcode...
+git config user.email "samuelongitcode@gmail.com"
+git config user.name "samuelongitcode"
+
+:: Ensure we are using the correct SSH key for this session
+set GIT_SSH_COMMAND=ssh -i ~/.ssh/id_ed25519
+
+echo Adding files...
+git add .
+
+echo Committing changes...
+git commit -m "project-03-monitoring init"
+
+:: Check if the remote is set to the correct SSH host
+git remote set-url origin git@github.com:samuelongitcode/project-03-monitoring.git
+
+echo Pushing to main...
+:: Added --force here to overwrite the rejected remote history once
+git push -u origin main --force
+
+echo ========================================
+echo Done!
+echo ========================================
+pause
