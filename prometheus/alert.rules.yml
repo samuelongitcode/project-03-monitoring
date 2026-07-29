@@ -1,0 +1,25 @@
+groups:
+  - name: demo-app-alerts
+    rules:
+      - alert: HighErrorRate
+        # rate() over a 1-minute window means: if the app has been
+        # returning more than 0.5 errors/second on average over the last
+        # minute, and that's held true continuously for 30 seconds
+        # ("for: 30s"), fire the alert. The "for" clause matters — without
+        # it, one bad second would fire an alert for a blip, not a trend.
+        expr: rate(app_errors_total[1m]) > 0.5
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Demo app error rate is high"
+          description: "app_errors_total has been increasing at more than 0.5/sec for over 30 seconds."
+
+      - alert: DemoAppDown
+        expr: up{job="demo-app"} == 0
+        for: 15s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Demo app is not responding to Prometheus scrapes"
+          description: "Prometheus has failed to scrape demo-app for at least 15 seconds."

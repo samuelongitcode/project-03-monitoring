@@ -1,0 +1,19 @@
+route:
+  receiver: "default-receiver"
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 15m
+
+receivers:
+  - name: "default-receiver"
+    # Fill in a real Slack incoming webhook URL to actually get notified.
+    # Create one at: https://api.slack.com/messaging/webhooks
+    # Without a real URL here, alerts still fire and show up in the
+    # Alertmanager UI (http://localhost:9093) — the webhook just adds a
+    # notification on top of that.
+    slack_configs:
+      - api_url: "https://hooks.slack.com/services/REPLACE/WITH/YOUR_WEBHOOK"
+        channel: "#alerts"
+        send_resolved: true
+        title: "{{ .GroupLabels.alertname }}"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
